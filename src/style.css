@@ -1,0 +1,22 @@
+.image-gallery {
+    position: relative;
+    width: 250px;
+}
+
+.gallery-wrapper .image-gallery {
+    margin: auto;
+}
+
+.image {
+    width: 100%;
+    position: absolute;
+    box-sizing: border-box;
+    border: 4px solid #fff;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.15);
+    transition: transform linear 0.2s;
+}
+
+.image img {
+    display: block;
+    width: 100%;
+}

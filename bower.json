@@ -1,0 +1,20 @@
+{
+  "name": "al-image-gallery",
+  "description": "",
+  "main": "index.js",
+  "authors": [
+    "Adrian Lesniak"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/adrian110288/al-image-gallery",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "jquery": "^2.2.4"
+  }
+}

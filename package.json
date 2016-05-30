@@ -1,0 +1,24 @@
+{
+  "name": "al-image-gallery",
+  "version": "1.0.0",
+  "description": "Angular image gallery component",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://adrian110288@github.com/adrian110288/al-image-gallery.git"
+  },
+  "author": "Adrian Lesniak",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/adrian110288/al-image-gallery/issues"
+  },
+  "homepage": "https://github.com/adrian110288/al-image-gallery#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-scss": "^1.3.17"
+  }
+}
