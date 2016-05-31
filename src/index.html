@@ -9,9 +9,17 @@
         <script src="imageGalleryDirective.js"></script>
     </head>
     <body>
-        <div class="gallery-wrapper">
-            <al-image-gallery></al-image-gallery>    
+        <div class="gallery-wrapper" ng-controller="ctrl">
+            <al-image-gallery images="images" reveal-radius="150" on-image-click="imageClicked(src)"></al-image-gallery>
         </div>
 
     </body>
+    <script type="text/javascript">
+        app.controller('ctrl', function($scope) {
+            $scope.images=['img/image1.jpg', 'img/image2.jpg', 'img/image3.jpg', 'img/image4.jpg', 'img/image5.jpg', 'img/image6.jpg'];
+            $scope.imageClicked = function(src) {
+                console.log(src);
+            }
+        });
+    </script>
 </html>
