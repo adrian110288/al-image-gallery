@@ -5,97 +5,111 @@ app.directive('alImageGallery', function() {
     return {
         restrict: "AE",
         // templateUrl: "imageGalleryTemplate.html",
-        template: "<div class='image-gallery'><div class='image' ng-repeat='imageUrl in images'><img ng-src='{{imageUrl}}' alt='image{{$index}}'></div></div>",
+        template: "<div class='image-gallery'><div class='image' ng-repeat='imageUrl in images' ng-click='onImageClick({src: imageUrl})'><img ng-src='{{imageUrl}}' alt='image{{$index}}'></div></div>",
         scope: {
-            images: "=?"
+            images: "=?",
+            revealRadius: "@",
+            onImageClick: "&"
         },
         link: function(scope, element, attrs) {
-            scope.images=['img/image1.jpg', 'img/image2.jpg', 'img/image3.jpg', 'img/image4.jpg', 'img/image5.jpg', 'img/image6.jpg'];
 
-            var imageHeightCache = [];
-            var maxHeight = 0;
+            var imageDataCache = [];
+            var maxImageHeight = 0;
 
             angular.element(element).ready(function() {
-                var imageContainer = $(element).find('.image-gallery')
-                var images = $(element).find('.image img');
+                var gallery = $(element).find('.image-gallery')
+                var images = $(gallery).find('.image');
 
                 var loadedCount = 0;
 
                 for (var i = 0; i < images.length; i++) {
                     var image = images[i];
 
-                    $(image).on('click', function() {
-                        console.log($(this).attr('alt'));
-                    });
-
-                    $(image).on('load', function() {
+                    $(image).find('img').on('load', function() {
 
                         loadedCount ++;
 
                         var imgHeight = $(this).height();
-                        imageHeightCache.push({
-                            image: $(this),
+                        imageDataCache.push({
+                            image: $(this).parent(),
                             height: imgHeight
                         });
 
-                        if (imgHeight > maxHeight) {
-                            maxHeight = imgHeight;
-                            imageContainer.height(maxHeight);
+                        if (imgHeight > maxImageHeight) {
+                            maxImageHeight = imgHeight;
                         }
 
                         if (loadedCount == images.length) {
                             didAllLoad();
                         }
                     });
+
                 }
 
-                $(element).hover(function() {
-                    for (var i = 0; i < imageHeightCache.length; i++) {
-                        var imageCache = imageHeightCache[i];
+                $(element).hover(
 
-                        var randomXTranslate = Math.random() * 120 + 'px';
-                        var randomYTranslate = Math.random() * 120 + 'px';
+                    function() {
 
-                        $(imageCache.image).parent().css(
-                            {
-                                transform: 'translate(' + randomXTranslate + ', ' + randomYTranslate + ')'
+                        for (var angle = 0, index = 0; angle < 360, index < imageDataCache.length - 1; angle+=360/imageDataCache.length - 1, index ++) {
+
+                            var cachedImage = imageDataCache[index];
+                            var x, y;
+
+                            if(angular.isUndefined(cachedImage.translation)) {
+                                x = Math.cos(angle) * scope.revealRadius;
+                                y = Math.sin(angle) * scope.revealRadius;
+
+                                cachedImage.translation = {
+                                    x: x,
+                                    y: y
+                                };
                             }
-                        );
-                    }
-                }, function() {
-                    for (var i = 0; i < imageHeightCache.length; i++) {
-                        var imageCache = imageHeightCache[i];
-
-                        $(imageCache.image).parent().css(
-                            {
-                                transform: 'translate(0px, 0px) rotate(' + imageCache.rotation + ')'
+                            else {
+                                x = cachedImage.translation.x;
+                                y = cachedImage.translation.y;
                             }
-                        );
+
+                            $(cachedImage.image).css({transform: 'translate('+ x + 'px, ' + y +'px)'});
+                        }
+                    },
+
+                    function() {
+                        for (var i = 0; i < imageDataCache.length; i++) {
+                            var cachedImage = imageDataCache[i];
+
+                            $(cachedImage.image).css(
+                                {
+                                    transform: 'translate(0px, 0px) rotate(' + cachedImage.rotation + 'deg)'
+                                }
+                            );
+                        }
                     }
-                });
+                );
+
+                gallery.height(maxImageHeight);
 
             });
 
             var didAllLoad = function() {
+                for (var i = 0; i < imageDataCache.length; i++) {
 
-                for (var i = 0; i < imageHeightCache.length; i++) {
-                    var cached = imageHeightCache[i];
+                    var cachedImage = imageDataCache[i];
 
-                    if(cached.height < maxHeight) {
-                        var diff = maxHeight - cached.height;
-                        cached.image.parent().css({top: diff/2 + "px"});
-                    }
-
-                    var rot = setRandomRotation(cached.image.parent());
-                    cached.rotation = rot;
+                    setOffsetTop(cachedImage);
+                    setRandomRotation(cachedImage, i);
                 }
             }
 
-            var setRandomRotation = function(element) {
-                var randomRotation = (imageHeightCache.indexOf(element)%2 ==0? '-' : '') + Math.random() * 5 + 'deg';
-                element.css({transform: 'rotate(' + randomRotation + ')'});
+            var setOffsetTop = function(cachedImage) {
+                var diff = maxImageHeight - cachedImage.height;
+                cachedImage.image.css({top: diff/2 + "px"});
+                cachedImage.offsetTop = diff/2;
+            }
 
-                return randomRotation;
+            var setRandomRotation = function(cachedImage, index) {
+                var randomRotation = (Math.random() * 5) * (index%2 == 0? 1 : -1);
+                cachedImage.image.css({transform: 'rotate(' + randomRotation + 'deg)'});
+                cachedImage.rotation = randomRotation;
             }
         }
     }
