@@ -27,7 +27,7 @@ This setup will allow you to use the image gallery directive:
 
 The directive provides three attributes to set up the gallery:
 * **images** - an array of image urls to be loaded in the gallery 
-* **reveal-radius** - a distance in px of how far the image spread when the gallery is hovered on
+* **reveal-radius** - a distance in px of how far the images spread when the gallery is hovered on
 * **onImageClick** - and callback function returning the url of the clicked image
 
 The example usage of the directive can be found in **index.html** in **src/** folder.
