@@ -1,4 +1,4 @@
-#Image Gallery for Angular
+# Image Gallery for Angular
 
 This component is my small side project while I am learning Angular framework. 
 
